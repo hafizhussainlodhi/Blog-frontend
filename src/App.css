@@ -1,0 +1,49 @@
+/* Dark Theme General Styles */
+body { margin: 0; background-color: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; }
+
+/* Sidebar Styles */
+.sidebar {
+  width: 260px;
+  background-color: #1e293b;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+}
+
+.sidebar nav button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar nav button:hover { color: white; background: #334155; border-radius: 8px; }
+
+/* Content Area */
+.main-content {
+  margin-left: 260px;
+  padding: 40px;
+  background-color: #0f172a;
+}
+
+/* Card/Panel Styling */
+.panel {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Button Styling */
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
