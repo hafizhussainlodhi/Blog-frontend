@@ -156,6 +156,12 @@ export default function BlogView({ initialCategory, openForm }) {
   const role = localStorage.getItem('role');
   const blogImageUrl = "http://localhost:3000/_next/image?url=%2Fassets%2Fblog-1.webp&w=3840&q=75";
 
+  // Handle newly created blog from the form
+  const handleBlogCreated = (createdBlog) => {
+    setBlogs(prev => [createdBlog, ...prev]);
+    setIsCreating(false);
+  };
+
   useEffect(() => {
     setFilter(initialCategory || 'All');
     setIsCreating(false); 
@@ -233,6 +239,17 @@ export default function BlogView({ initialCategory, openForm }) {
     }
   };
 
+  // Function to format MongoDB createdAt date into readable string
+  const formatDate = (dateString) => {
+    if (!dateString) return "Recent";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }); // Output example: "Jun 22, 2026"
+  };
+
   return (
     <div className="p-2 md:p-4 text-white min-h-screen">
       {/* Top Header Section */}
@@ -253,7 +270,6 @@ export default function BlogView({ initialCategory, openForm }) {
 
       {/* Conditionally Render Edit, Create or Grid view */}
       {editingBlog ? (
-        /* RESPONSIVE EDIT COMPONENT CONTAINER */
         <form onSubmit={saveEdit} className="bg-[#1e293b] p-5 md:p-8 rounded-2xl border border-slate-700 space-y-4 max-w-2xl mx-auto">
           <div>
             <label className="block text-sm text-slate-400 mb-2">Title</label>
@@ -300,7 +316,6 @@ export default function BlogView({ initialCategory, openForm }) {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Responsive Select Filter */}
           <select 
             value={filter} 
             onChange={(e) => setFilter(e.target.value)} 
@@ -314,7 +329,6 @@ export default function BlogView({ initialCategory, openForm }) {
             <option value="Travel">Travel</option>
           </select>
 
-          {/* RESPONSIVE BLOG CARDS GRID: 1 column mobile, 2 tablet, 3 desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredBlogs.map(blog => (
               <div key={blog._id} className="bg-[#1e293b] rounded-2xl border border-slate-700 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 flex flex-col justify-between">
@@ -323,12 +337,12 @@ export default function BlogView({ initialCategory, openForm }) {
                   <div className="p-5">
                     <span className="text-indigo-400 text-xs font-bold uppercase tracking-widest">{blog.category}</span>
                     <h3 className="text-lg md:text-xl font-bold mt-2 mb-2 line-clamp-2">{blog.title}</h3>
-                    <p className="text-slate-400 text-xs md:text-sm">By Admin • 2026-06-18</p>
+                    {/* CHANGED: Static date ki jagah ab database se blog.createdAt lekar format kiya hai */}
+                    <p className="text-slate-400 text-xs md:text-sm">By Admin • {formatDate(blog.createdAt)}</p>
                     <p className="text-slate-300 text-sm mt-3 line-clamp-3">{blog.content}</p>
                   </div>
                 </div>
 
-                {/* Edit/Delete actions for creators/admin */}
                 <div className="p-5 pt-0 flex gap-3 mt-auto">
                   <button 
                     onClick={() => startEdit(blog)}
